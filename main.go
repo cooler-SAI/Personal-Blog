@@ -29,38 +29,41 @@ func adminMiddleware(next http.HandlerFunc) http.HandlerFunc {
 }
 
 func main() {
-	// Гостевые маршруты
+
 	http.HandleFunc("/", homePage)
 	http.HandleFunc("/article/", articlePage)
 
-	// Админские маршруты с защитой
 	http.HandleFunc("/admin", adminMiddleware(adminDashboard))
 	http.HandleFunc("/admin/new", adminMiddleware(newArticlePage))
 	http.HandleFunc("/admin/edit/", adminMiddleware(editArticlePage))
 	http.HandleFunc("/admin/delete/", adminMiddleware(deleteArticle))
 
-	// Статические файлы (CSS)
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
-	// Запуск сервера
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
 		return
 	}
 }
 
-func homePage(w http.ResponseWriter, r *http.Request) {
-	// Обработчик главной страницы
-	templates.ExecuteTemplate(w, "home.html", nil)
+func homePage(w http.ResponseWriter, _ *http.Request) {
+
+	err := templates.ExecuteTemplate(w, "home.html", nil)
+	if err != nil {
+		return
+	}
 }
 
-func articlePage(w http.ResponseWriter, r *http.Request) {
-	// Обработчик страницы статьи
-	templates.ExecuteTemplate(w, "article.html", nil)
+func articlePage(w http.ResponseWriter, _ *http.Request) {
+
+	err := templates.ExecuteTemplate(w, "article.html", nil)
+	if err != nil {
+		return
+	}
 }
 
-func adminDashboard(w http.ResponseWriter, r *http.Request) {
-	// Пример данных для шаблона
+func adminDashboard(w http.ResponseWriter, _ *http.Request) {
+
 	articles := []struct {
 		ID    int
 		Title string
@@ -69,25 +72,30 @@ func adminDashboard(w http.ResponseWriter, r *http.Request) {
 		{ID: 2, Title: "Second Article"},
 	}
 
-	// Рендеринг шаблона
 	err := templates.ExecuteTemplate(w, "dashboard.html", articles)
 	if err != nil {
 		return
 	}
 }
 
-func newArticlePage(w http.ResponseWriter, r *http.Request) {
-	// Страница добавления новой статьи
-	templates.ExecuteTemplate(w, "new.html", nil)
+func newArticlePage(w http.ResponseWriter, _ *http.Request) {
+
+	err := templates.ExecuteTemplate(w, "new.html", nil)
+	if err != nil {
+		return
+	}
 }
 
-func editArticlePage(w http.ResponseWriter, r *http.Request) {
-	// Страница редактирования статьи
-	templates.ExecuteTemplate(w, "edit.html", nil)
+func editArticlePage(w http.ResponseWriter, _ *http.Request) {
+
+	err := templates.ExecuteTemplate(w, "edit.html", nil)
+	if err != nil {
+		return
+	}
 }
 
-func deleteArticle(w http.ResponseWriter, r *http.Request) {
-	// Удаление статьи (заглушка)
+func deleteArticle(w http.ResponseWriter, _ *http.Request) {
+
 	_, err := w.Write([]byte("Article deleted!"))
 	if err != nil {
 		return
