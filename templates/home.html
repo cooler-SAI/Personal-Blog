@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="/static/style.css">
+  <title>Personal Blog</title>
+</head>
+<body>
+<h1>Personal Blog</h1>
+<ul>
+  {{range .}}
+  <li><a href="/article/{{.ID}}">{{.Title}}</a> - {{.Date}}</li>
+  {{end}}
+</ul>
+</body>
+</html>
