@@ -8,22 +8,21 @@ import (
 var templates *template.Template
 
 func init() {
-	// Загружаем шаблоны
+
 	templates = template.Must(template.ParseGlob("templates/*.html"))
 }
 
-// Middleware для авторизации администратора
 func adminMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		// Проверка базовой авторизации
+
 		username, password, ok := r.BasicAuth()
 		if !ok || username != "admin" || password != "password" {
-			// Если авторизация не удалась
+
 			w.Header().Set("WWW-Authenticate", `Basic realm="Restricted"`)
 			http.Error(w, "Unauthorized", http.StatusUnauthorized)
 			return
 		}
-		// Если авторизация успешна, продолжаем выполнение следующего обработчика
+
 		next(w, r)
 	}
 }
